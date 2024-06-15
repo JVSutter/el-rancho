@@ -12,12 +12,14 @@ from restaurant.totem import Totem
 # Importe o que achar necessario aqui
 # import my_module
 
+import restaurant.shared as shared
+
 def definitions(argv, threads):
     """
     Esse espaco e reservado para voce definir variaveis globais que serao utilizadas por todas as threads.
     Lembre-se de criar as variaveis globais no arquivo restaurant/shared.py
     """
-    pass
+    shared.totem = Totem(argv.clients)
 
 def close_all(argv, threads):
     """
@@ -32,7 +34,7 @@ def close_all(argv, threads):
 if __name__ == "__main__":
 
     args = argparse.ArgumentParser()
-    
+
     # Argumentos para o programa (main.py --clients 10 --crew 5 --seats 5)
 
     args.add_argument("--clients", type=int, default=10, help="Numero de clientes que irao ao restaurante mexicano")
@@ -47,11 +49,11 @@ if __name__ == "__main__":
     assert argv.crew > 0, "Numero de funcionarios deve ser maior que 0"
     assert argv.seats > 0 and argv.seats < argv.clients, "Numero de assentos deve ser maior que 0 e menor que o numero de clientes"
 
-   
+
     threads = list()
 
     threads.append(Chef())
-    
+
     # Instanciando a equipe
     for id in range(argv.crew):
         threads.append(Crew(id))
