@@ -13,12 +13,12 @@ class Totem:
         self.call = list()
         # Insira o que achar necessario no construtor da classe.
 
-    """ 
+    """
         A função get_ticket não pode ser alterada. 
         Ela garante que um ticket aleatório (não repetido) seja criado e que a equipe seja chamada para atendê-lo.
     """
     def get_ticket(self):
-        
+
         # Gera um ticket aleatório
         ticket_number = randint(1, self.maximum_ticket_number)   
 
@@ -32,9 +32,8 @@ class Totem:
 
         self.call_crew()
 
-        return ticket_number    
+        return ticket_number
 
     """ Insira sua sincronização."""
     def call_crew(self):
         print("[CALLING] - O totem chamou a equipe para atender o pedido da senha {}.".format(self.already_sampled[-1]))
-

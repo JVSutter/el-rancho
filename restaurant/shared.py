@@ -8,6 +8,7 @@
 
 totem = None
 
+
 def get_totem():
     global totem
     return totem
