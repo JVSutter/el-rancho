@@ -13,6 +13,8 @@ from restaurant.totem import Totem
 # import my_module
 
 import restaurant.shared as shared
+from threading import Semaphore
+
 
 def definitions(argv, threads):
     """
@@ -20,6 +22,12 @@ def definitions(argv, threads):
     Lembre-se de criar as variaveis globais no arquivo restaurant/shared.py
     """
     shared.totem = Totem(argv.clients)
+
+    shared.client_can_continue_events = [None] * argv.clients
+    shared.clients_waiting_crew_sem = Semaphore(value=0)
+
+    shared.crew_size = argv.crew
+
 
 def close_all(argv, threads):
     """
@@ -48,7 +56,6 @@ if __name__ == "__main__":
     assert argv.clients > 0, "Numero de clientes deve ser maior que 0"
     assert argv.crew > 0, "Numero de funcionarios deve ser maior que 0"
     assert argv.seats > 0 and argv.seats < argv.clients, "Numero de assentos deve ser maior que 0 e menor que o numero de clientes"
-
 
     threads = list()
 

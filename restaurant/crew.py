@@ -1,5 +1,6 @@
 # imports do Python
 from threading import Thread
+import restaurant.shared as shared
 
 
 """
@@ -15,6 +16,7 @@ class Crew(Thread):
 
     """ O membro da equipe espera um cliente. """
     def wait(self):
+        shared.clients_waiting_crew_sem.acquire()
         print("O membro da equipe {} está esperando um cliente.".format(self._id))
 
     """ O membro da equipe chama o cliente da senha ticket."""

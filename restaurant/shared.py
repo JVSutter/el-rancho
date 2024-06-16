@@ -8,7 +8,22 @@
 
 totem = None
 
+client_can_continue_events = None
+clients_waiting_crew_sem = None
+
+crew_size = None
+
 
 def get_totem():
     global totem
     return totem
+
+
+def get_client_can_continue_events():
+    global client_can_continue_events
+    return client_can_continue_events
+
+
+def get_clients_waiting_crew_sem():
+    global clients_waiting_crew_sem
+    return clients_waiting_crew_sem

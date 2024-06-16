@@ -18,14 +18,15 @@ class Client(Thread):
     """ Inicializa o cliente."""
     def __init__(self, i):
         self._id = i
+        super().__init__()
+
+        # Insira o que achar necessario no construtor da classe.
         self.ticket = None
         self.thinking_time = randint(MIN_THINKING_TIME, MAX_THINKING_TIME)
-        super().__init__()
-        # Insira o que achar necessario no construtor da classe.
 
     """ Pega o ticket do totem."""
     def get_my_ticket(self):
-        self.ticket = shared.get_totem().get_ticket()
+        self.ticket = shared.get_totem().generate_new_ticket()
         print("[TICKET] - O cliente {} pegou o ticket {}.".format(self._id, self.ticket))
 
     """ Espera ser atendido pela equipe. """
