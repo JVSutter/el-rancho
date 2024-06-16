@@ -9,9 +9,9 @@ from restaurant.crew import Crew
 from restaurant.chef import Chef
 
 from restaurant.totem import Totem
+
 # Importe o que achar necessario aqui
 # import my_module
-
 import restaurant.shared as shared
 from threading import Semaphore
 
@@ -21,6 +21,7 @@ def definitions(argv, threads):
     Esse espaco e reservado para voce definir variaveis globais que serao utilizadas por todas as threads.
     Lembre-se de criar as variaveis globais no arquivo restaurant/shared.py
     """
+
     shared.totem = Totem(argv.clients)
 
     shared.client_can_continue_events = [None] * argv.clients
@@ -40,7 +41,6 @@ def close_all(argv, threads):
 ######                          Nao modifique o codigo abaixo                               ######
 ##################################################################################################
 if __name__ == "__main__":
-
     args = argparse.ArgumentParser()
 
     # Argumentos para o programa (main.py --clients 10 --crew 5 --seats 5)

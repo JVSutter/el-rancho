@@ -6,12 +6,12 @@
 #       global my_global_variable
 #       return my_global_variable
 
-totem = None
+totem = None  # Instância do totem
 
 client_can_continue_events = None
-clients_waiting_crew_sem = None
+clients_waiting_crew_sem = None  # Semáforo cujo valor é igual ao n° de clientes esperando a equipe
 
-crew_size = None
+crew_size = None  # Tamanho da equipe
 
 
 def get_totem():
