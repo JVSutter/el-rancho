@@ -7,7 +7,6 @@ from random import randint
     Não troque o nome das variáveis compartilhadas, a assinatura e o nomes das funções.
 """
 class Chef(Thread):
-
     def __init__(self):
         super().__init__()
         # Insira o que achar necessario no construtor da classe.
@@ -15,7 +14,7 @@ class Chef(Thread):
     """ Chef prepara um dos pedido que recebeu do membro da equipe."""
     def cook(self):
         print("[COOKING] - O chefe esta preparando o pedido para a senha {}.".format(0)) # Modifique para o numero do ticket
-        sleep(randint(1,5))
+        sleep(randint(1, 5))
 
     """ Chef serve o pedido preparado."""
     def serve(self):

@@ -3,7 +3,6 @@
     Não troque o nome das variáveis compartilhadas, a assinatura e o nomes das funções.
 """
 class Table:
-
     """ Inicia a mesa com um número de lugares """
     def __init__(self, number):
         self._number = number

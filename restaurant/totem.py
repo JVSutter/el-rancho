@@ -38,11 +38,15 @@ class Totem:
 
         return ticket_number
 
-    """ Insira sua sincronização."""
+    """Insira sua sincronização."""
     def call_crew(self):
-        shared.clients_waiting_crew_sem.release()
+        shared.clients_waiting_crew_sem.release()  # Aciona alguém da equipe
         print("[CALLING] - O totem chamou a equipe para atender o pedido da senha {}.".format(self.already_sampled[-1]))
 
+    """
+        Gera um ticket novo e verifica se o cliente atual é o último a ser atendido.
+        Caso seja o último, aciona toda a equipe para que finalizem suas threads.
+    """
     def generate_new_ticket(self):
         with self.ticket_registry_lock:
             if len(self.already_sampled) == self.number_of_clients - 1:
