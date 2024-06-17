@@ -24,7 +24,6 @@ def definitions(argv, threads):
 
     shared.totem = Totem(argv.clients)
 
-    shared.client_can_continue_events = [None] * argv.clients
     shared.clients_waiting_crew_sem = Semaphore(value=0)
 
     shared.crew_size = argv.crew

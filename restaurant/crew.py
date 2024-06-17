@@ -16,8 +16,9 @@ class Crew(Thread):
 
     """ O membro da equipe espera um cliente. """
     def wait(self):
-        shared.clients_waiting_crew_sem.acquire()
         print("O membro da equipe {} está esperando um cliente.".format(self._id))
+        shared.clients_waiting_crew_sem.acquire()  # Aguarda um cliente
+        return shared.get_totem().get_priority_ticket()
 
     """ O membro da equipe chama o cliente da senha ticket."""
     def call_client(self, ticket):
@@ -28,6 +29,10 @@ class Crew(Thread):
 
     """ Thread do membro da equipe."""
     def run(self):
-        self.wait()
-        self.call_client(0)
-        self.make_order(0)
+        while True:
+            ticket = self.wait()
+            if ticket == -1:
+                break
+
+            self.call_client(ticket)
+            self.make_order(ticket)

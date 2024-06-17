@@ -8,7 +8,6 @@
 
 totem = None  # Instância do totem
 
-client_can_continue_events = None
 clients_waiting_crew_sem = None  # Semáforo cujo valor é igual ao n° de clientes esperando a equipe
 
 crew_size = None  # Tamanho da equipe
@@ -19,11 +18,11 @@ def get_totem():
     return totem
 
 
-def get_client_can_continue_events():
-    global client_can_continue_events
-    return client_can_continue_events
-
-
 def get_clients_waiting_crew_sem():
     global clients_waiting_crew_sem
     return clients_waiting_crew_sem
+
+
+def get_crew_size():
+    global crew_size
+    return crew_size
