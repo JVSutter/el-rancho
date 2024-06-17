@@ -1,6 +1,7 @@
 # imports do Python
 import sys
-sys.dont_write_bytecode = True # Usado para nao criar arquivos .pyc
+
+sys.dont_write_bytecode = True  # Usado para nao criar arquivos .pyc
 import argparse
 
 # Imports necessarios para executar as threads
@@ -25,6 +26,7 @@ def definitions(argv, threads):
     shared.totem = Totem(argv.clients)
 
     shared.clients_waiting_crew_sem = Semaphore(value=0)
+    shared.can_client_continue_events = dict()
 
     shared.crew_size = argv.crew
 
@@ -44,9 +46,24 @@ if __name__ == "__main__":
 
     # Argumentos para o programa (main.py --clients 10 --crew 5 --seats 5)
 
-    args.add_argument("--clients", type=int, default=10, help="Numero de clientes que irao ao restaurante mexicano")
-    args.add_argument("--crew", type=int, default=5, help="Numero de funcionarios do restaurante mexicano")
-    args.add_argument("--seats", type=int, default=5, help="Quantidade de assentos na grande mesa do restaurante mexicano")
+    args.add_argument(
+        "--clients",
+        type=int,
+        default=10,
+        help="Numero de clientes que irao ao restaurante mexicano",
+    )
+    args.add_argument(
+        "--crew",
+        type=int,
+        default=5,
+        help="Numero de funcionarios do restaurante mexicano",
+    )
+    args.add_argument(
+        "--seats",
+        type=int,
+        default=5,
+        help="Quantidade de assentos na grande mesa do restaurante mexicano",
+    )
 
     # Parseando os argumentos
     argv = args.parse_args()
@@ -54,7 +71,9 @@ if __name__ == "__main__":
     # Verificando se os argumentos sao validos
     assert argv.clients > 0, "Numero de clientes deve ser maior que 0"
     assert argv.crew > 0, "Numero de funcionarios deve ser maior que 0"
-    assert argv.seats > 0 and argv.seats < argv.clients, "Numero de assentos deve ser maior que 0 e menor que o numero de clientes"
+    assert (
+        argv.seats > 0 and argv.seats < argv.clients
+    ), "Numero de assentos deve ser maior que 0 e menor que o numero de clientes"
 
     threads = list()
 
