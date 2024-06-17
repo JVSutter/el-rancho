@@ -49,15 +49,22 @@ class Totem:
     """
     def generate_new_ticket(self):
         with self.ticket_registry_lock:
-            if len(self.already_sampled) == self.number_of_clients - 1:
+            if len(self.already_sampled) == self.number_of_clients - 1:  # Se for o último cliente
                 self.trigger_all_crew_members()
 
             return self.get_ticket()
 
     def trigger_all_crew_members(self):
-        for _ in range(shared.crew_size):
+        for _ in range(shared.get_crew_size()):
             shared.clients_waiting_crew_sem.release()
 
     def get_priority_ticket(self):
         with self.ticket_registry_lock:
-            return min(self.call)
+            # Se todos os clientes já foram chamados, retorna -1 (valor sentinela)
+            if len(self.call) == 0 and len(self.already_sampled) == self.number_of_clients:
+                return -1
+
+            priority_ticket = min(self.call)  # O ticket com menor valor é o mais prioritário
+            self.call.remove(priority_ticket)
+
+            return priority_ticket
