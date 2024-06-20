@@ -16,6 +16,7 @@ from restaurant.totem import Totem
 from restaurant.ticket_order_synchronizer import TicketOrderSynchronizer
 import restaurant.shared as shared
 from threading import Semaphore
+from restaurant.table import Table
 
 
 def definitions(argv, threads):
@@ -30,6 +31,7 @@ def definitions(argv, threads):
     shared.clients_waiting_crew_sem = Semaphore(value=0)
     shared.crew_size = argv.crew
 
+    shared.table = Table(argv.seats)
 
 def close_all(argv, threads):
     """

@@ -73,6 +73,7 @@ class Client(Thread):
                 self._id
             )
         )
+        shared.get_table().seat(self._id)
         print(
             "[SEAT] - O cliente {} encontrou um lugar livre e sentou".format(self._id)
         )
@@ -80,6 +81,7 @@ class Client(Thread):
     """ O cliente deixa o restaurante."""
 
     def leave(self) -> None:
+        shared.get_table().leave(self._id)
         print("[LEAVE] - O cliente {} saiu do restaurante".format(self._id))
 
     """ Thread do cliente """
