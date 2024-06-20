@@ -14,6 +14,8 @@ ticket_order_synchronizer = None  # Sincronizador de pedidos e chamadas de ticke
 
 crew_size = None  # Tamanho da equipe
 
+table = None # Mesa
+
 
 def get_totem():
     global totem
@@ -33,3 +35,7 @@ def get_ticket_order_synchronizer():
 def get_crew_size():
     global crew_size
     return crew_size
+
+def get_table():
+    global table
+    return table
