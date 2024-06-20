@@ -27,9 +27,10 @@ class Crew(Thread):
 
     def call_client(self, ticket):
         print("[CALLING] - O membro da equipe {} está chamando o cliente da senha {}.".format(self._id, ticket))
-        shared.can_client_continue_events[ticket].set()
+        shared.get_ticket_order_synchronizer().call_ticket_owner(ticket)
 
     def make_order(self, order):
+        shared.get_ticket_order_synchronizer().block_until_order_is_made(order)
         print("[STORING] - O membro da equipe {} está anotando o pedido {} para o chef.".format(self._id, order))
 
     """ Thread do membro da equipe."""

@@ -10,10 +10,7 @@ totem = None  # Instância do totem
 
 clients_waiting_crew_sem = None  # Semáforo cujo valor é igual ao n° de clientes esperando a equipe
 
-#  Dicionário do tipo {ticket: evento}. Tem como objetivo estabelecer comunicação com
-#  o cliente com base no ticket retirado por ele. Isso é feito acessando-se o evento
-#  associado àquele ticket dentro do dicionário.
-can_client_continue_events = None
+ticket_order_synchronizer = None
 
 crew_size = None  # Tamanho da equipe
 
@@ -28,9 +25,9 @@ def get_clients_waiting_crew_sem():
     return clients_waiting_crew_sem
 
 
-def get_can_client_continue_events():
-    global can_client_continue_events
-    return can_client_continue_events
+def get_ticket_order_synchronizer():
+    global ticket_order_synchronizer
+    return ticket_order_synchronizer
 
 
 def get_crew_size():

@@ -26,21 +26,18 @@ class Client(Thread):
         # Insira o que achar necessario no construtor da classe.
         self.ticket = None
         self.thinking_time = randint(MIN_THINKING_TIME, MAX_THINKING_TIME)
-        self.can_continue_event = Event()
 
     """ Pega o ticket do totem."""
 
     def get_my_ticket(self):
         self.ticket = shared.get_totem().generate_new_ticket()
-        shared.can_client_continue_events[self.ticket] = self.can_continue_event
         print("[TICKET] - O cliente {} pegou o ticket {}.".format(self._id, self.ticket))
 
     """ Espera ser atendido pela equipe. """
 
     def wait_crew(self):
         print("[WAIT] - O cliente {} esta aguardando atendimento.".format(self._id))
-        self.can_continue_event.wait()
-        self.can_continue_event.clear()
+        shared.get_ticket_order_synchronizer().block_until_ticket_is_called(self.ticket)
 
     """ O cliente pensa no pedido."""
 
@@ -51,6 +48,7 @@ class Client(Thread):
     """ O cliente faz o pedido."""
 
     def order(self):
+        shared.get_ticket_order_synchronizer().make_order(self.ticket)
         print("[ORDER] - O cliente {} pediu algo.".format(self._id))
 
     """ Espera pelo pedido ficar pronto. """

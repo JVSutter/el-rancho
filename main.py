@@ -13,6 +13,7 @@ from restaurant.totem import Totem
 
 # Importe o que achar necessario aqui
 # import my_module
+from restaurant.ticket_order_synchronizer import TicketOrderSynchronizer
 import restaurant.shared as shared
 from threading import Semaphore
 
@@ -24,10 +25,9 @@ def definitions(argv, threads):
     """
 
     shared.totem = Totem(argv.clients)
+    shared.ticket_order_synchronizer = TicketOrderSynchronizer()
 
     shared.clients_waiting_crew_sem = Semaphore(value=0)
-    shared.can_client_continue_events = dict()
-
     shared.crew_size = argv.crew
 
 
