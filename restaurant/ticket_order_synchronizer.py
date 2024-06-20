@@ -1,13 +1,16 @@
 from threading import Event
 from typing import Dict
+from queue import Queue
 
 
 class TicketOrderSynchronizer:
     """Classe responsável por sincronizar o fluxo de pedidos e chamadas de tickets."""
 
-    def __init__(self) -> None:
+    def __init__(self, num_clients: int) -> None:
         self.has_ticket_been_called: Dict[int, Event] = {}
         self.has_order_been_made: Dict[int, Event] = {}
+        self.orders: Queue[int] = Queue()
+        self.orders_left = num_clients
 
     """Avisa a thread do cliente que o ticket foi chamado."""
     def call_ticket_owner(self, ticket_num: int) -> None:
@@ -19,15 +22,27 @@ class TicketOrderSynchronizer:
         self.search_ticket_in_dict(ticket_num, self.has_ticket_been_called)
         self.has_ticket_been_called[ticket_num].wait()
 
-    """Avisa a thread do funcionário que o pedido foi feito."""
+    """Avisa a thread do funcionário que o pedido foi feito"""
     def make_order(self, ticket_num: int) -> None:
         self.search_ticket_in_dict(ticket_num, self.has_order_been_made)
         self.has_order_been_made[ticket_num].set()
 
-    """Bloqueia a thread do funcionário até que o pedido seja feito."""
+    """
+    Bloqueia a thread do funcionário até que o pedido seja feito. Após isso,
+    adiciona o pedido na fila.
+    """
     def block_until_order_is_made(self, ticket_num: int) -> None:
         self.search_ticket_in_dict(ticket_num, self.has_order_been_made)
         self.has_order_been_made[ticket_num].wait()
+        self.orders.put(ticket_num)
+
+    """Método para o chef pegar o pedido na fila."""
+    def get_order(self) -> int:
+        self.orders_left -= 1
+        if self.orders_left == 0:
+            return -1
+
+        return self.orders.get()
 
     """Verifica se o ticket está no dicionário e, caso não esteja, adiciona-o."""
     def search_ticket_in_dict(self, ticket_num: int, dict_to_verify: Dict[int, Event]) -> None:
