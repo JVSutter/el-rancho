@@ -22,7 +22,8 @@ class Chef(Thread):
 
     """ Chef serve o pedido preparado."""
     def serve(self) -> None:
-        print("[READY] - O chefe está servindo o pedido para a senha {}.".format(0))
+        print("[READY] - O chefe está servindo o pedido para a senha {}.".format(self.current_order))
+        shared.get_ticket_order_synchronizer().signal_client_order_is_ready(self.current_order)
 
     """ O chefe espera algum pedido vindo da equipe."""
     def wait_order(self) -> int:
