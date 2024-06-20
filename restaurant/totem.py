@@ -1,6 +1,7 @@
 # imports do Python
 from random import randint
 from threading import Lock
+from typing import List
 
 import restaurant.shared as shared
 
@@ -8,21 +9,21 @@ import restaurant.shared as shared
     Não troque o nome das variáveis compartilhadas, a assinatura e o nomes das funções.
 """
 class Totem:
-    def __init__(self, number_of_clients):
+    def __init__(self, number_of_clients: int) -> None:
         super().__init__()
-        self.already_sampled = list()
-        self.maximum_ticket_number = number_of_clients * 5
-        self.call = list()
+        self.already_sampled: List[int] = list()
+        self.maximum_ticket_number: int = number_of_clients * 5
+        self.call: List[int] = list()
 
         # Insira o que achar necessario no construtor da classe.
-        self.number_of_clients = number_of_clients
-        self.ticket_registry_lock = Lock()
+        self.number_of_clients: int = number_of_clients
+        self.ticket_registry_lock: Lock = Lock()
 
     """
         A função get_ticket não pode ser alterada.
         Ela garante que um ticket aleatório (não repetido) seja criado e que a equipe seja chamada para atendê-lo.
     """
-    def get_ticket(self):
+    def get_ticket(self) -> int:
         # Gera um ticket aleatório
         ticket_number = randint(1, self.maximum_ticket_number)
 
@@ -39,7 +40,7 @@ class Totem:
         return ticket_number
 
     """Insira sua sincronização."""
-    def call_crew(self):
+    def call_crew(self) -> None:
         shared.clients_waiting_crew_sem.release()  # Aciona alguém da equipe
         print("[CALLING] - O totem chamou a equipe para atender o pedido da senha {}.".format(self.already_sampled[-1]))
 
@@ -47,18 +48,18 @@ class Totem:
         Gera um ticket novo e verifica se o cliente atual é o último a ser atendido.
         Caso seja o último, aciona toda a equipe para que finalizem suas threads.
     """
-    def generate_new_ticket(self):
+    def generate_new_ticket(self) -> int:
         with self.ticket_registry_lock:
             if len(self.already_sampled) == self.number_of_clients - 1:  # Se for o último cliente
                 self.trigger_all_crew_members()
 
             return self.get_ticket()
 
-    def trigger_all_crew_members(self):
+    def trigger_all_crew_members(self) -> None:
         for _ in range(shared.get_crew_size()):
             shared.clients_waiting_crew_sem.release()
 
-    def get_priority_ticket(self):
+    def get_priority_ticket(self) -> int:
         with self.ticket_registry_lock:
             # Se todos os clientes já foram chamados, retorna -1 (valor sentinela)
             if len(self.call) == 0 and len(self.already_sampled) == self.number_of_clients:
