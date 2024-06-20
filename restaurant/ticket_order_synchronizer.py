@@ -58,10 +58,10 @@ class TicketOrderSynchronizer:
     """Método para o chef pegar o pedido na fila."""
 
     def get_order(self) -> int:
-        self.orders_left -= 1
         if self.orders_left == 0:
             return -1  # Valor sentinela, indica que não há mais pedidos
 
+        self.orders_left -= 1
         return self.orders.get()
 
     """Verifica se o ticket está no dicionário e, caso não esteja, adiciona-o."""
