@@ -10,7 +10,7 @@ totem = None  # Instância do totem
 
 clients_waiting_crew_sem = None  # Semáforo cujo valor é igual ao n° de clientes esperando a equipe
 
-ticket_order_synchronizer = None
+ticket_order_synchronizer = None  # Sincronizador de pedidos e chamadas de tickets
 
 crew_size = None  # Tamanho da equipe
 
