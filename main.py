@@ -25,7 +25,7 @@ def definitions(argv, threads):
     """
 
     shared.totem = Totem(argv.clients)
-    shared.ticket_order_synchronizer = TicketOrderSynchronizer()
+    shared.ticket_order_synchronizer = TicketOrderSynchronizer(num_clients=argv.clients)
 
     shared.clients_waiting_crew_sem = Semaphore(value=0)
     shared.crew_size = argv.crew
