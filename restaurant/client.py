@@ -9,7 +9,8 @@ import restaurant.shared as shared
 # Constantes
 MIN_THINKING_TIME = 1
 MAX_THINKING_TIME = 5
-
+MIN_EATING_TIME = 1
+MAX_EATING_TIME = 5
 
 """
     Não troque o nome das variáveis compartilhadas, a assinatura e o nomes das funções.
@@ -61,12 +62,17 @@ class Client(Thread):
         print("[WAIT MEAL] - O cliente {} esta aguardando o prato.".format(self._id))
         shared.get_ticket_order_synchronizer().block_until_order_is_ready(self.ticket)
 
+
+    """ O cliente come por algum tempo."""
+    def eating(self) -> None:
+        print("[EATING] - O cliente {} esta comendo.".format(self._id))
+        sleep(randint(MIN_EATING_TIME, MAX_EATING_TIME))
+
     """
         O cliente reserva o lugar e se senta.
         Lembre-se que antes de comer o cliente deve ser atendido pela equipe,
         ter seu pedido pronto e possuir um lugar pronto pra sentar.
     """
-
     def seat_and_eat(self) -> None:
         print(
             "[WAIT SEAT] - O cliente {} esta aguardando um lugar ficar livre".format(
@@ -74,9 +80,8 @@ class Client(Thread):
             )
         )
         shared.get_table().seat(self._id)
-        print(
-            "[SEAT] - O cliente {} encontrou um lugar livre e sentou".format(self._id)
-        )
+
+        self.eating()
 
     """ O cliente deixa o restaurante."""
 
