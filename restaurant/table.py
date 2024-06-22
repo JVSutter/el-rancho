@@ -12,12 +12,12 @@ class Table:
 
     """ O cliente se senta na mesa."""
     def seat(self, client: int) -> None:
-        self._clients.append(client)
         self._seats_sem.acquire()
+        self._clients.append(client)
+
         print(
             "[SEAT] - O cliente {} encontrou um lugar livre e sentou".format(client)
         )
-
         print("[TABLE] - Clientes na mesa: {}.".format(self._clients))
 
     """ O cliente deixa a mesa."""
