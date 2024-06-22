@@ -62,7 +62,6 @@ class Client(Thread):
         print("[WAIT MEAL] - O cliente {} esta aguardando o prato.".format(self._id))
         shared.get_ticket_order_synchronizer().block_until_order_is_ready(self.ticket)
 
-
     """ O cliente come por algum tempo."""
     def eating(self) -> None:
         print("[EATING] - O cliente {} esta comendo.".format(self._id))
