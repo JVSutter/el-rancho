@@ -17,7 +17,8 @@ class Totem:
 
         # Insira o que achar necessario no construtor da classe.
         self.number_of_clients: int = number_of_clients
-        self.ticket_registry_lock = Lock()  # Lock para mexer no registro de tickets do Totem
+        self.already_sampled_lock = Lock()
+        self.call_lock = Lock()
 
     """
         A função get_ticket não pode ser alterada.
@@ -49,15 +50,15 @@ class Totem:
         Caso seja o último, aciona toda a equipe para que finalizem suas threads.
     """
     def generate_new_ticket(self) -> int:
-        with self.ticket_registry_lock:
+        with self.already_sampled_lock:
             if len(self.already_sampled) == self.number_of_clients - 1:  # Se for o último cliente
                 self.trigger_all_crew_members()
 
             return self.get_ticket()
 
     """
-    Aciona todos os membros da equipe. Chamada quando o último cliente é atendido,
-    visando finalizar as threads dos membros da equipe.
+    Aciona todos os membros da equipe, sendo chamado quando o último cliente é atendido.
+    Visa finalizar as threads dos membros da equipe.
     """
     def trigger_all_crew_members(self) -> None:
         for _ in range(shared.get_crew_size()):
@@ -66,7 +67,7 @@ class Totem:
     """Obtém o ticket mais prioritário (menor valor)."""
     def get_priority_ticket(self) -> int:
         # Se todos os clientes já foram chamados, retorna -1 (valor sentinela)
-        with self.ticket_registry_lock:
+        with self.call_lock:
             if len(self.call) == 0 and len(self.already_sampled) == self.number_of_clients:
                 return -1
 
