@@ -71,6 +71,8 @@ class TicketOrderSynchronizer:
             return -1  # Valor sentinela, indica que não há mais pedidos
 
         self.orders_left -= 1
+
+        # Se a fila estiver vazia, bloqueia a thread
         return self.orders.get()
 
     """Verifica se o ticket está no dicionário e, caso não esteja, adiciona-o."""

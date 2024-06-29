@@ -25,7 +25,7 @@ class Client(Thread):
         super().__init__()
 
         # Insira o que achar necessario no construtor da classe.
-        self.ticket = None
+        self.ticket = -1 # valor default para não inciializar com 'None'
         self.thinking_time = randint(MIN_THINKING_TIME, MAX_THINKING_TIME)
 
     """ Pega o ticket do totem."""
