@@ -6,15 +6,20 @@
 #       global my_global_variable
 #       return my_global_variable
 
-totem = None  # Instância do totem
+from threading import Semaphore
+from restaurant.table import Table
+from restaurant.totem import Totem
+from restaurant.ticket_order_synchronizer import TicketOrderSynchronizer
 
-clients_waiting_crew_sem = None  # Semáforo cujo valor é igual ao n° de clientes esperando a equipe
+totem: Totem  # Instância do totem
 
-ticket_order_synchronizer = None  # Sincronizador de pedidos e chamadas de tickets
+clients_waiting_crew_sem: Semaphore  # Semáforo cujo valor é igual ao n° de clientes esperando a equipe
 
-crew_size = None  # Tamanho da equipe
+ticket_order_synchronizer: TicketOrderSynchronizer  # Sincronizador de pedidos e chamadas de tickets
 
-table = None # Mesa
+crew_size: int  # Tamanho da equipe
+
+table: Table # Mesa
 
 
 def get_totem():

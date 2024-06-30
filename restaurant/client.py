@@ -25,11 +25,10 @@ class Client(Thread):
         super().__init__()
 
         # Insira o que achar necessario no construtor da classe.
-        self.ticket = None
+        self.ticket = -1 # valor default para não inciializar com 'None'
         self.thinking_time = randint(MIN_THINKING_TIME, MAX_THINKING_TIME)
 
     """ Pega o ticket do totem."""
-
     def get_my_ticket(self) -> None:
         self.ticket = shared.get_totem().generate_new_ticket()
         print(
@@ -37,19 +36,16 @@ class Client(Thread):
         )
 
     """ Espera ser atendido pela equipe. """
-
     def wait_crew(self) -> None:
         print("[WAIT] - O cliente {} esta aguardando atendimento.".format(self._id))
         shared.get_ticket_order_synchronizer().block_until_ticket_is_called(self.ticket)
 
     """ O cliente pensa no pedido."""
-
     def think_order(self) -> None:
         print("[THINK] - O cliente {} esta pensando no que pedir.".format(self._id))
         sleep(self.thinking_time)
 
     """ O cliente faz o pedido."""
-
     def order(self) -> None:
         shared.get_ticket_order_synchronizer().signal_crew_order_has_been_made(
             self.ticket
@@ -57,11 +53,9 @@ class Client(Thread):
         print("[ORDER] - O cliente {} pediu algo.".format(self._id))
 
     """ Espera pelo pedido ficar pronto. """
-
     def wait_chef(self) -> None:
         print("[WAIT MEAL] - O cliente {} esta aguardando o prato.".format(self._id))
         shared.get_ticket_order_synchronizer().block_until_order_is_ready(self.ticket)
-
 
     """ O cliente come por algum tempo."""
     def eating(self) -> None:
@@ -84,13 +78,11 @@ class Client(Thread):
         self.eating()
 
     """ O cliente deixa o restaurante."""
-
     def leave(self) -> None:
         shared.get_table().leave(self._id)
         print("[LEAVE] - O cliente {} saiu do restaurante".format(self._id))
 
     """ Thread do cliente """
-
     def run(self) -> None:
         self.get_my_ticket()
         self.wait_crew()

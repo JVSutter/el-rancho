@@ -1,6 +1,7 @@
 # imports do Python
 from random import randint
 from typing import List
+from threading import Lock
 
 import restaurant.shared as shared
 
@@ -16,6 +17,8 @@ class Totem:
 
         # Insira o que achar necessario no construtor da classe.
         self.number_of_clients: int = number_of_clients
+        self.already_sampled_lock = Lock()
+        self.call_lock = Lock()
 
     """
         A função get_ticket não pode ser alterada.
@@ -47,21 +50,28 @@ class Totem:
         Caso seja o último, aciona toda a equipe para que finalizem suas threads.
     """
     def generate_new_ticket(self) -> int:
-        if len(self.already_sampled) == self.number_of_clients - 1:  # Se for o último cliente
-            self.trigger_all_crew_members()
+        with self.already_sampled_lock:
+            if len(self.already_sampled) == self.number_of_clients - 1:  # Se for o último cliente
+                self.trigger_all_crew_members()
 
-        return self.get_ticket()
+            return self.get_ticket()
 
+    """
+    Aciona todos os membros da equipe, sendo chamado quando o último cliente é atendido.
+    Visa finalizar as threads dos membros da equipe.
+    """
     def trigger_all_crew_members(self) -> None:
         for _ in range(shared.get_crew_size()):
             shared.clients_waiting_crew_sem.release()
 
+    """Obtém o ticket mais prioritário (menor valor)."""
     def get_priority_ticket(self) -> int:
         # Se todos os clientes já foram chamados, retorna -1 (valor sentinela)
-        if len(self.call) == 0 and len(self.already_sampled) == self.number_of_clients:
-            return -1
+        with self.call_lock:
+            if len(self.call) == 0 and len(self.already_sampled) == self.number_of_clients:
+                return -1
 
-        priority_ticket = min(self.call)  # O ticket com menor valor é o mais prioritário
-        self.call.remove(priority_ticket)
+            priority_ticket = min(self.call)  # O ticket com menor valor é o mais prioritário
+            self.call.remove(priority_ticket)
 
         return priority_ticket

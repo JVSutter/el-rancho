@@ -17,14 +17,12 @@ class Crew(Thread):
         # Insira o que achar necessario no construtor da classe.
 
     """ O membro da equipe espera um cliente. """
-
     def wait(self) -> int:
         print("O membro da equipe {} está esperando um cliente.".format(self._id))
         shared.clients_waiting_crew_sem.acquire()  # Aguarda um cliente
         return shared.get_totem().get_priority_ticket()
 
     """ O membro da equipe chama o cliente da senha ticket."""
-
     def call_client(self, ticket: int) -> None:
         print(
             "[CALLING] - O membro da equipe {} está chamando o cliente da senha {}.".format(
@@ -35,6 +33,7 @@ class Crew(Thread):
             ticket
         )
 
+    """ O membro da equipe anota o pedido do cliente. """
     def make_order(self, order: int) -> None:
         shared.get_ticket_order_synchronizer().block_until_order_has_been_made(order)
         print(
@@ -46,7 +45,6 @@ class Crew(Thread):
         shared.get_ticket_order_synchronizer().add_order(order)
 
     """ Thread do membro da equipe."""
-
     def run(self) -> None:
         while True:
             ticket = self.wait()
